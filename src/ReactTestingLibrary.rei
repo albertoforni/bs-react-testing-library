@@ -1,4 +1,4 @@
-module FireEvent {
+module FireEvent: {
   let abort: (~eventInit: Js.t({..})=?, Dom.element) => unit;
   let animationEnd: (~eventInit: Js.t({..})=?, Dom.element) => unit;
   let animationIteration: (~eventInit: Js.t({..})=?, Dom.element) => unit;
@@ -79,13 +79,16 @@ type renderOptions = {
   "container": Js.undefined(Dom.element),
 };
 
-[@bs.module "@testing-library/react"] external cleanup : unit => unit = "";
+[@bs.module "@testing-library/react"] external cleanup: unit => unit = "";
 
-[@bs.get] external container : renderResult => Dom.element = "";
+[@bs.module "@testing-library/react"]
+external act: (unit => Js.Nullable.t(Js.Promise.t(unit))) => unit = "";
 
-[@bs.get] external baseElement : renderResult => Dom.element = "";
+[@bs.get] external container: renderResult => Dom.element = "";
 
-[@bs.send.pipe: renderResult] external unmount : unit => bool = "";
+[@bs.get] external baseElement: renderResult => Dom.element = "";
+
+[@bs.send.pipe: renderResult] external unmount: unit => bool = "";
 
 let getByAltText: (string, renderResult) => Dom.element;
 
@@ -122,7 +125,7 @@ let getByTitle: (string, renderResult) => Dom.element;
 let getByDisplayValue: (string, renderResult) => Dom.element;
 
 [@bs.send.pipe: renderResult]
-external rerender : ReasonReact.reactElement => unit = "";
+external rerender: ReasonReact.reactElement => unit = "";
 
 let render:
   (

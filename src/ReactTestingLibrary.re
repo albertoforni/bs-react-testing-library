@@ -11,23 +11,26 @@ type renderOptions = {
   "container": Js.undefined(Dom.element),
 };
 
-[@bs.module "@testing-library/react"] external cleanup : unit => unit = "";
+[@bs.module "@testing-library/react"] external cleanup: unit => unit = "";
 
 [@bs.module "@testing-library/react"]
-external _render : (ReasonReact.reactElement, renderOptions) => renderResult =
+external act: (unit => Js.Nullable.t(Js.Promise.t(unit))) => unit = "";
+
+[@bs.module "@testing-library/react"]
+external _render: (ReasonReact.reactElement, renderOptions) => renderResult =
   "render";
 
-[@bs.get] external container : renderResult => Dom.element = "";
+[@bs.get] external container: renderResult => Dom.element = "";
 
-[@bs.get] external baseElement : renderResult => Dom.element = "";
-
-[@bs.send.pipe: renderResult]
-external _debug : Js.undefined(Dom.element) => unit = "debug";
-
-[@bs.send.pipe: renderResult] external unmount : unit => bool = "";
+[@bs.get] external baseElement: renderResult => Dom.element = "";
 
 [@bs.send.pipe: renderResult]
-external rerender : ReasonReact.reactElement => unit = "";
+external _debug: Js.undefined(Dom.element) => unit = "debug";
+
+[@bs.send.pipe: renderResult] external unmount: unit => bool = "";
+
+[@bs.send.pipe: renderResult]
+external rerender: ReasonReact.reactElement => unit = "";
 
 let getByAltText = (string, result) =>
   getByAltText(string, result |> container);
@@ -39,14 +42,15 @@ let getByTestId = (string, result) =>
   getByTestId(string, result |> container);
 
 let getByText = (~matcher, ~options=?, result) =>
-  getByText(~matcher, ~options=?options, result |> container);
+  getByText(~matcher, ~options?, result |> container);
 
 let getByLabelText = (~matcher, ~options=?, result) =>
-  getByLabelText(~matcher, ~options=?options, result |> container);
+  getByLabelText(~matcher, ~options?, result |> container);
 
 let getByTitle = (string, result) => getByTitle(string, result |> container);
 
-let getByDisplayValue = (string, result) => getByDisplayValue(string, result |> container);
+let getByDisplayValue = (string, result) =>
+  getByDisplayValue(string, result |> container);
 
 let render = (~baseElement=?, ~container=?, element) => {
   let baseElement_ =
